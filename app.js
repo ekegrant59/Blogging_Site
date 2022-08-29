@@ -3,6 +3,7 @@ const ejs = require('ejs')
 const mongoose = require('mongoose')
 const express = require('express')
 const blogSchema = require('./blogSchema')
+import {env} from 'process'
 
 const app = express()
 mongoose.connect(process.env.MONGODB)
