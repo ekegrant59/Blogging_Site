@@ -1,3 +1,4 @@
+require('dotenv').config()
 const ejs = require('ejs')
 const mongoose = require('mongoose')
 const express = require('express')
@@ -6,9 +7,7 @@ const blogSchema = require('./blogSchema')
 const app = express()
 mongoose.connect('mongodb+srv://myFirstBlog:0phEn1Ft4GyFHe3j@nodeapps.mizczy3.mongodb.net/blog')
 .then(() => {
-    app.listen(3000, () => {
-        console.log('Connection successful')
-    })
+   console.log('Connection successful')
 }).catch((err) => {
     console.log(err, "Connection failed")
 })
@@ -49,4 +48,7 @@ app.get('/blogs', async (req,res) => {
     res.render('blogs', {posts: allPosts})
 })
 
-
+const port = process.env.PORT || 3000
+app.listen(port, ()=>{
+    console.log(`App started on port ${port}`)
+} )
