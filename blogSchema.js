@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-mongoose.connect('mongodb+srv://myFirstBlog:0phEn1Ft4GyFHe3j@nodeapps.mizczy3.mongodb.net/blog')
+mongoose.connect(process.env.MONGODB)
 
 const blogSchema = new mongoose.Schema({
     name : {

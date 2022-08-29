@@ -5,7 +5,7 @@ const express = require('express')
 const blogSchema = require('./blogSchema')
 
 const app = express()
-mongoose.connect('mongodb+srv://myFirstBlog:0phEn1Ft4GyFHe3j@nodeapps.mizczy3.mongodb.net/blog')
+mongoose.connect(process.env.MONGODB)
 .then(() => {
    console.log('Connection successful')
 }).catch((err) => {
