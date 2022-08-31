@@ -3,10 +3,14 @@ const ejs = require('ejs')
 const mongoose = require('mongoose')
 const express = require('express')
 const blogSchema = require('./blogSchema')
-const env = require('process')
+const bcrypt = require('bcrypt')
+const cookieParser = require('cookie-parser')
+const jwt = require('jsonwebtoken')
+const userSchema = require('./userSchema')
 
 const app = express()
-mongoose.connect(process.env.MONGODB)
+const mongodb = process.env.MONGODB || 'mongodb://localhost:27017/blog'
+mongoose.connect(mongodb)
 .then(() => {
    console.log('Connection successful')
 }).catch((err) => {
@@ -18,8 +22,10 @@ app.use('/assets', express.static('assets'))
 
 app.use(express.urlencoded({extended: true}))
 
-app.get('/', (req,res)=>{
-    res.render('index')
+app.get('/', async (req,res)=>{
+    const allPosts = await blogSchema.find()
+
+    res.render('index', {posts: allPosts})
 })
 app.post('/success', (req,res)=>{
     const details = req.body
@@ -43,10 +49,43 @@ app.post('/success', (req,res)=>{
     res.render('success')
 })
 
-app.get('/blogs', async (req,res) => {
-    const allPosts = await blogSchema.find()
 
-    res.render('blogs', {posts: allPosts})
+app.get('/login', (req,res)=>{
+    res.render('login')
+})
+
+app.get('/register', (req,res)=>{
+    res.render('register')
+})
+
+app.get('/addBlogs',(req,res)=>{
+    res.render('addBlogs')
+})
+
+app.post('/login',(req,res)=>{
+    res.render('processlogin')
+})
+
+app.post('/register', (req,res)=>{
+    const regInfo = req.body
+    // console.log(regInfo)
+
+    registerUser()
+    async function registerUser(){
+        try{
+            const user = new userSchema({
+                username: regInfo.username,
+                email: regInfo.email,
+                password: regInfo.password
+            })
+            await user.save()
+            res.redirect('login')
+        } 
+        catch(err){
+            console.log(err)
+        }
+
+    }
 })
 
 const port = process.env.PORT || 3000

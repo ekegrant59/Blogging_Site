@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
-mongoose.connect(process.env.MONGODB)
+const mongodb = process.env.MONGODB || 'mongodb://localhost:27017/blog'
+mongoose.connect(mongodb)
 
 const blogSchema = new mongoose.Schema({
     name : {
